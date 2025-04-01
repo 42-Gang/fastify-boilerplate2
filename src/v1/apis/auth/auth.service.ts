@@ -1,5 +1,4 @@
 import { z } from 'zod';
-import { JWT } from '@fastify/jwt';
 import { v4 as uuidv4 } from 'uuid';
 
 import {
@@ -12,11 +11,11 @@ import { STATUS } from '../../common/constants/status.js';
 import { NotFoundException } from '../../common/exceptions/core.error.js';
 import { FastifyBaseLogger } from 'fastify';
 import UserRepositoryInterface from '../../storage/database/interfaces/user.repository.interface.js';
+
 export default class AuthService {
   constructor(
     private readonly userRepository: UserRepositoryInterface,
-    private readonly jwt: JWT,
-    private readonly logger: FastifyBaseLogger
+    private readonly logger: FastifyBaseLogger,
   ) {}
 
   async signup(
@@ -33,7 +32,7 @@ export default class AuthService {
     }
 
     this.logger.info(`User ${newUser.id} created successfully`);
-    
+
     return {
       status: STATUS.SUCCESS,
       message: 'User information retrieved successfully',
@@ -53,9 +52,6 @@ export default class AuthService {
     return {
       status: STATUS.SUCCESS,
       message: 'User information retrieved successfully',
-      data: {
-        accessToken: this.jwt.sign({ id: foundUser.id, email: foundUser.email }),
-      },
     };
   }
 
