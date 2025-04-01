@@ -23,7 +23,7 @@ export async function addRoutes(fastify: FastifyInstance, routes: Route[]) {
         url: route.url,
         handler: route.handler,
         schema: route.options.schema,
-        preHandler: fastify.authenticate, // ✅ 권한 확인 미들웨어
+        onRequest: fastify.authenticate, // ✅ 권한 확인 미들웨어
       });
     } else {
       // 권한 필요 없으면 그대로 등록

@@ -15,6 +15,7 @@ export default class AuthController {
 
   login = async (request: FastifyRequest, reply: FastifyReply) => {
     const body = loginRequestSchema.parse(request.body);
+
     const result = await this.authService.login(body);
     const refreshToken = await this.authService.generateRefreshToken();
 

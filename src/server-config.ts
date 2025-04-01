@@ -3,7 +3,6 @@ import { serializerCompiler, validatorCompiler, ZodTypeProvider } from 'fastify-
 import app from './app.js';
 import { setDiContainer } from './plugins/container.js';
 import { FastifyInstance } from 'fastify';
-import jwtPlugin from './plugins/jwt-plugin.js';
 import { fastifyRedis } from '@fastify/redis';
 import swaggerPlugin from './plugins/swagger/swagger-plugin.js';
 import { Server } from 'socket.io';
@@ -15,7 +14,6 @@ export async function configureServer(server: FastifyInstance) {
 }
 
 export async function registerPlugins(server: FastifyInstance) {
-  await registerJwtPlugin(server); // JWT 플러그인 등록
   await registerRedisPlugin(server); // Redis 플러그인 등록
   await setDiContainer(server); // 의존성 주입 컨테이너 설정
   await registerSwaggerPlugin(server); // Swagger 플러그인 등록
@@ -35,10 +33,6 @@ export async function setupGracefulShutdown(server: FastifyInstance, socket: Ser
       await socket.close();
     },
   );
-}
-
-async function registerJwtPlugin(server: FastifyInstance) {
-  await server.register(jwtPlugin);
 }
 
 async function registerRedisPlugin(server: FastifyInstance) {
