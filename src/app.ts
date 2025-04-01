@@ -2,6 +2,7 @@ import { FastifyError, FastifyInstance, FastifyReply, FastifyRequest } from 'fas
 
 import routeV1 from './v1/index.js';
 import { STATUS } from './v1/common/constants/status.js';
+import { UnAuthorizedException } from './v1/common/exceptions/core.error.js';
 
 export default async function app(fastify: FastifyInstance) {
   setErrorHandler(fastify);
@@ -24,15 +25,22 @@ function setErrorHandler(fastify: FastifyInstance) {
 
 function setMiddleware(fastify: FastifyInstance) {
   fastify.addHook('onRequest', (request, reply, done) => {
-    console.log(request.headers);
     const authorized = request.headers['x-authorized'];
+    const userId = request.headers['x-user-id'];
+    
     if (authorized === undefined || Array.isArray(authorized)) {
       done();
+    }
+    if (userId === undefined || Array.isArray(userId)) {
+      done();
+    }
+    if (isNaN(Number(userId)) === true) {
+      throw new UnAuthorizedException('user id is not a number');
     }
 
     if (authorized === 'true') {
       request.authorized = true;
-      request.myId = Number(request.headers['x-user-id']);
+      request.myId = parseInt(userId as string , 10);
     }
     done();
   });
