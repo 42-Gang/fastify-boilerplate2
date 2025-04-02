@@ -29,19 +29,25 @@ function setMiddleware(fastify: FastifyInstance) {
     const userId = request.headers['x-user-id'];
     
     if (authenticated === undefined || Array.isArray(authenticated)) {
-      done();
+      request.authenticated = false;
+      request.userId = undefined;
     }
+
     if (userId === undefined || Array.isArray(userId)) {
-      done();
+      request.authenticated = false;
+      request.userId = undefined;
     }
+    
     if (isNaN(Number(userId))) {
-      throw new UnAuthorizedException('user id is not a number');
+      request.authenticated = false;
+      request.userId = undefined;
     }
 
     if (authenticated === 'true') {
       request.authenticated = true;
       request.userId = parseInt(userId as string , 10);
     }
+
     done();
   });
 }
