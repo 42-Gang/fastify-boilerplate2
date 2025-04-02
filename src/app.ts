@@ -2,7 +2,6 @@ import { FastifyError, FastifyInstance, FastifyReply, FastifyRequest } from 'fas
 
 import routeV1 from './v1/index.js';
 import { STATUS } from './v1/common/constants/status.js';
-import { UnAuthorizedException } from './v1/common/exceptions/core.error.js';
 
 export default async function app(fastify: FastifyInstance) {
   setErrorHandler(fastify);
