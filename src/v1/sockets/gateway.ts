@@ -1,13 +1,8 @@
 import { Server } from 'socket.io';
 import chatNamespace from './chat/chat.namespace.js';
+import { socketMiddleware } from './utils/middleware.js';
 
 export const registerSocketGateway = (io: Server) => {
-  io.on('connection', (socket) => {
-    console.log('🟢 [default] Client connected:', socket.id);
-    socket.on('disconnect', () => {
-      console.log('🔴 [default] Client disconnected:', socket.id);
-    });
-  });
-
+  io.use(socketMiddleware);
   chatNamespace(io.of('/chat'));
 };
