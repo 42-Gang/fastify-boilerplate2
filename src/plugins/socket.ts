@@ -9,12 +9,6 @@ export function createSocketServer(fastify: FastifyInstance) {
     },
   });
 
-  socket.on('connection', (socket) => {
-    fastify.log.info('Client connected');
-    socket.on('disconnect', () => {
-      fastify.log.info('Client disconnected');
-    });
-  });
   registerSocketGateway(socket);
   return socket;
 }
